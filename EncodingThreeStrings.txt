@@ -1,0 +1,88 @@
+import java.util.Scanner;
+public class StringEncoder {
+    
+    public static class Result {
+        String output1;
+        String output2;
+        String output3;
+        
+        public Result(String output1, String output2, String output3) {
+            this.output1 = output1;
+            this.output2 = output2;
+            this.output3 = output3;
+        }
+    }
+
+    public Result encodeStrings(String input1, String input2, String input3) {
+        String[] parts1 = splitIntoParts(input1);
+        String[] parts2 = splitIntoParts(input2);
+        String[] parts3 = splitIntoParts(input3);
+        
+        String output1 = parts1[0] + parts2[1] + parts3[2];
+        String output2 = parts1[1] + parts2[2] + parts3[0];
+        String output3 = parts1[2] + parts2[0] + parts3[1];
+        
+        output3 = toggleCase(output3);
+        
+        return new Result(output1, output2, output3);
+    }
+    
+    private String[] splitIntoParts(String input) 
+    {
+        int length = input.length();
+        int partSize = length / 3;
+        int remainder = length % 3;
+        
+        String front, middle, end;
+        
+        if (remainder == 0) 
+        {
+            front = input.substring(0, partSize);
+            middle = input.substring(partSize, 2 * partSize);
+            end = input.substring(2 * partSize);
+        } 
+        else if (remainder == 1) 
+        {
+            front = input.substring(0, partSize);
+            middle = input.substring(partSize, 2 * partSize + 1);
+            end = input.substring(2 * partSize + 1);
+        } 
+        else 
+        {
+            front = input.substring(0, partSize + 1);
+            middle = input.substring(partSize + 1, 2 * partSize + 1);
+            end = input.substring(2 * partSize + 1);
+        }
+        
+        return new String[]{front, middle, end};
+    }
+    
+    private String toggleCase(String input) 
+    {
+        StringBuilder toggled = new StringBuilder(input.length());
+        for (char ch : input.toCharArray()) 
+        {
+            if (Character.isLowerCase(ch)) 
+            {
+                toggled.append(Character.toUpperCase(ch));
+            }
+            else 
+            {
+                toggled.append(Character.toLowerCase(ch));
+            }
+        }
+        return toggled.toString();
+    }
+
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        String str1=sc.nextLine();
+        String str2=sc.nextLine();
+        String str3=sc.nextLine();
+        StringEncoder encoder = new StringEncoder();
+        Result result=encoder.encodeStrings(str1,str2,str3);
+         System.out.println("Output1=" + result.output1); 
+        System.out.println("Output2=" + result.output2); 
+        System.out.println("Output3=" + result.output3);
+    }
+}
